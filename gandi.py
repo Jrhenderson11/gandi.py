@@ -96,8 +96,10 @@ def main(args):
 		examine_domain(args.domain)
 	if args.action == 'clear':
 		clear_records(args.domain)
+		examine_domain(args.domain)
 	if args.action == 'add':
 		add_record(args.domain, args.type, args.ip)
+		examine_domain(args.domain)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()

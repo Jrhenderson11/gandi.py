@@ -7,7 +7,17 @@ A python script to automate management of gandi DNS.
 
 The API key must be specified in an environment variable `API_KEY`, this can be found in the gandi website under profile settings.
 
-<pre>
+possible actions:  
+ - list  
+ - info  
+ - clear  
+ - add  
+  
+<pre>  
+$ ./gandi.py list                             
+Domains:
+['example.com']
+
 $<font color="#4E9A06">./gandi.py</font> info -d example.com
 
 Info for <font color="#4E9A06"><b>example.com</b></font>:
