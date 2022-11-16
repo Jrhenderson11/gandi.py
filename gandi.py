@@ -15,8 +15,6 @@ except Exception as e:
 	print("Error: environment variable API_KEY must be specified")
 	exit(-1)
 
-
-
 def colourize_type(rr_type):
 
 	if rr_type == 'A':
@@ -86,7 +84,7 @@ def delete_record(domain, rr_name):
 def clear_records(domain):
 
 	resp = requests.delete(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
-		headers={'Authorization': f'Apikey {API_KEY}'}).json()
+		headers={'Authorization': f'Apikey {API_KEY}'})
 
 def main(args):
 	if args.action == 'list':
