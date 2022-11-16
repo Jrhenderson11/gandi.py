@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 import requests
 import json
@@ -8,7 +9,13 @@ import os
 # Docs:
 # https://api.gandi.net/docs/livedns/
 
-API_KEY=os.environ['API_KEY']
+try:
+	API_KEY=os.environ['API_KEY']
+except Exception as e:
+	print("Error: environment variable API_KEY must be specified")
+	exit(-1)
+
+
 
 def colourize_type(rr_type):
 
@@ -34,7 +41,6 @@ def examine_domain(domain):
 	
 	resp = requests.get(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
 		headers={'Authorization': f'Apikey {API_KEY}'}).json()
-
 
 	table = []
 	for d in resp:
@@ -90,20 +96,16 @@ def main(args):
 		examine_domain(args.domain)
 	if args.action == 'clear':
 		clear_records(args.domain)
-	if action == 'add':
+	if args.action == 'add':
 		add_record(args.domain, args.type, args.ip)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('action', choices=['list', 'info', 'clear', 'add']
+	parser.add_argument('action', choices=['list', 'info', 'clear', 'add'])
 	parser.add_argument('--domain', '-d', help='Domain')
 	parser.add_argument('--ip', '-i', help='IP address')
 	parser.add_argument('--type', '-t', help='Type of record to add')
 
 	args = parser.parse_args()
-
-	if API_KEY is None:
-		print("Error: environment variable API_KEY must be specified")
-		exit(-1)
 
 	main(args)
