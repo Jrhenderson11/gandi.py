@@ -57,17 +57,17 @@ def examine_domain(domain):
 
 	return
 
-def add_record(domain, type, ip):
+def add_record(domain, record, type, ip):
 	
 	data = {
-		'rrset_name': domain,
+		'rrset_name': record,
 		'rrset_type': type,
 		'rrset_values': [ip]
 	}
 
-	resp = requests.post(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
+	resp = requests.post(f'https://api.gandi.net//v5/livedns/domains/{domain}/records',
 		headers={'Authorization': f'Apikey {API_KEY}'},
-		data=data
+		json=data
 		)
 
 	return resp
@@ -96,13 +96,14 @@ def main(args):
 		clear_records(args.domain)
 		examine_domain(args.domain)
 	if args.action == 'add':
-		add_record(args.domain, args.type, args.ip)
+		print(add_record(args.domain, args.record, args.type, args.ip))
 		examine_domain(args.domain)
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('action', choices=['list', 'info', 'clear', 'add'])
 	parser.add_argument('--domain', '-d', help='Domain')
+	parser.add_argument('--record', '-r', help='Record to add', default='@')
 	parser.add_argument('--ip', '-i', help='IP address')
 	parser.add_argument('--type', '-t', help='Type of record to add')
 
