@@ -2,6 +2,7 @@
 import argparse
 import requests
 import json
+from textwrap import wrap
 from prettytable import PrettyTable
 from colorama import Fore, Back, Style
 import os
@@ -25,6 +26,8 @@ def colourize_type(rr_type):
 		return Fore.YELLOW + Style.BRIGHT + rr_type + Style.RESET_ALL
 	if rr_type == 'CNAME':
 		return Fore.BLUE + Style.BRIGHT + rr_type + Style.RESET_ALL
+	if rr_type == 'TXT':
+		return Fore.GREEN + Style.BRIGHT + rr_type + Style.RESET_ALL
 
 	return rr_type
 
@@ -40,13 +43,20 @@ def examine_domain(domain):
 	resp = requests.get(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
 		headers={'Authorization': f'Apikey {API_KEY}'}).json()
 
+	col_width = 30
+
 	table = []
-	for d in resp:
+	for i, d in enumerate(resp):
 		vals = []
 		vals.append(d['rrset_name'])
 		vals.append(colourize_type(d['rrset_type']))
 		vals.append(d['rrset_ttl'])
-		vals.append('\n'.join(d['rrset_values']))
+
+		colour = ""
+		if i%2 == 0:
+			colour = Style.DIM
+
+		vals.append(colour + '\n\n'.join(['\n'.join(wrap(x)) for x in d['rrset_values']]) + Style.RESET_ALL)
 
 		table.append(vals)
 
