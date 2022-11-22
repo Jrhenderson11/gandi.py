@@ -2,7 +2,6 @@
 
 A python script to automate management of gandi DNS.  
 
-
 ## Usage
 
 The API key must be specified in an environment variable `API_KEY`, this can be found in the gandi website under profile settings.

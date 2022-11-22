@@ -65,7 +65,7 @@ def add_record(domain, record, type, ip):
 		'rrset_values': [ip]
 	}
 
-	resp = requests.post(f'https://api.gandi.net//v5/livedns/domains/{domain}/records',
+	resp = requests.post(f'https://api.gandi.net//v5/livedns/domains/{domain}/records/{record}/{type}',
 		headers={'Authorization': f'Apikey {API_KEY}'},
 		json=data
 		)
