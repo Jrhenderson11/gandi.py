@@ -34,14 +34,14 @@ def colourize_type(rr_type):
 def list_domains():
 	
 	resp = requests.get('https://api.gandi.net/v5/livedns/domains',
-		headers={'Authorization': f'Apikey {API_KEY}'}).json()
+		headers={'Authorization': f'Bearer {API_KEY}'}).json()
 
 	return [x['fqdn'] for x in resp]
 
 def examine_domain(domain):
 	
 	resp = requests.get(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
-		headers={'Authorization': f'Apikey {API_KEY}'}).json()
+		headers={'Authorization': f'Bearer {API_KEY}'}).json()
 
 	col_width = 30
 
@@ -76,7 +76,7 @@ def add_record(domain, record, type, ip):
 	}
 
 	resp = requests.post(f'https://api.gandi.net//v5/livedns/domains/{domain}/records/{record}/{type}',
-		headers={'Authorization': f'Apikey {API_KEY}'},
+		headers={'Authorization': f'Bearer {API_KEY}'},
 		json=data
 		)
 
@@ -85,7 +85,7 @@ def add_record(domain, record, type, ip):
 def delete_record(domain, rr_name):
 
 	resp = requests.delete(f'https://api.gandi.net/v5/livedns/domains/{domain}/records/{rr_name}',
-		headers={'Authorization': f'Apikey {API_KEY}'}
+		headers={'Authorization': f'Bearer {API_KEY}'}
 		)
 
 	return resp.text()
@@ -94,7 +94,7 @@ def delete_record(domain, rr_name):
 def clear_records(domain):
 
 	resp = requests.delete(f'https://api.gandi.net/v5/livedns/domains/{domain}/records',
-		headers={'Authorization': f'Apikey {API_KEY}'})
+		headers={'Authorization': f'Bearer {API_KEY}'})
 
 def main(args):
 	if args.action == 'list':
