@@ -67,12 +67,12 @@ def examine_domain(domain):
 
 	return
 
-def add_record(domain, record, type, ip, ttl=300):
+def add_record(domain, record, type, value, ttl=300):
 	
 	data = {
 		'rrset_name': record,
 		'rrset_type': type,
-		'rrset_values': [ip],
+		'rrset_values': [value],
 		'rrset_ttl': ttl
 	}
 
@@ -107,7 +107,7 @@ def main(args):
 		clear_records(args.domain)
 		examine_domain(args.domain)
 	if args.action == 'add':
-		print(add_record(args.domain, args.record, args.type, args.ip, args.ttl))
+		print(add_record(args.domain, args.record, args.type, args.value, args.ttl))
 		examine_domain(args.domain)
 	if args.action == 'delete':
 		print(delete_record(args.domain, args.record))
