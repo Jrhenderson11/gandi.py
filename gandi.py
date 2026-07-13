@@ -67,12 +67,13 @@ def examine_domain(domain):
 
 	return
 
-def add_record(domain, record, type, ip):
+def add_record(domain, record, type, ip, ttl=300):
 	
 	data = {
 		'rrset_name': record,
 		'rrset_type': type,
-		'rrset_values': [ip]
+		'rrset_values': [ip],
+		'rrset_ttl': ttl
 	}
 
 	resp = requests.post(f'https://api.gandi.net//v5/livedns/domains/{domain}/records/{record}/{type}',
@@ -106,17 +107,25 @@ def main(args):
 		clear_records(args.domain)
 		examine_domain(args.domain)
 	if args.action == 'add':
-		print(add_record(args.domain, args.record, args.type, args.ip))
+		print(add_record(args.domain, args.record, args.type, args.ip, args.ttl))
 		examine_domain(args.domain)
+	if args.action == 'delete':
+		print(delete_record(args.domain, args.record))
+		print("Record {args.record} from {args.domain} deleted")
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('action', choices=['list', 'info', 'clear', 'add'])
-	parser.add_argument('--domain', '-d', help='Domain')
+	parser.add_argument('--domain', '-d', help='Domain', required=True)
 	parser.add_argument('--record', '-r', help='Record to add', default='@')
-	parser.add_argument('--ip', '-i', help='IP address')
+	parser.add_argument('--value', '-v', help='IP address or record value to add')
+	parser.add_argument('--ttl', help='TTL in seconds', default=300, type=int)
 	parser.add_argument('--type', '-t', help='Type of record to add')
 
 	args = parser.parse_args()
+
+	if args.domain.strip() == "":
+		print("Error: domain must be provided")
+		exit(-1)
 
 	main(args)
